@@ -26,7 +26,7 @@ yarn
 ```
 
 #### Free Deployment Platforms:
-* ![Railway](https://railway.app)
-* ![Qovery](https://www.qovery.com/)
-* ![OpeNode](https://www.openode.io/)
-* ![Heroku](https://heroku.com)
+* [Railway](https://railway.app)
+* [Qovery](https://www.qovery.com/)
+* [OpeNode](https://www.openode.io/)
+* [Heroku](https://heroku.com)

@@ -1,6 +1,6 @@
-# Discord.js V13 Boilerplate Bot
+# Discord.js V13 Starter Bot
 
-### A fully customizable boilerplate code for Discord.js V13
+### A fully customizable starter code for Discord.js V13
 
 ### Setup:
 

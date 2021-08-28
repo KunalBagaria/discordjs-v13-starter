@@ -45,7 +45,7 @@ client.once('ready', () => {
 	}).setToken(token);
 	(async () => {
 		try {
-			if (process.env.TOKEN) {
+			if (!envFILE.TOKEN) {
 				await rest.put(
 					Routes.applicationCommands(clientId), {
 						body: commands

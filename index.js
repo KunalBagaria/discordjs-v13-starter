@@ -24,7 +24,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 // Loading the token from .env file
 const dotenv = require('dotenv');
 const envFILE = dotenv.config();
-const token = process.env.TOKEN || envFILE.TOKEN;
+const token = process.env['TOKEN'] || envFILE.parsed['TOKEN'];
 
 // Edit your clientId and guildId here in this file
 const { clientId, guildId } = require('./config.json');
@@ -45,7 +45,7 @@ client.once('ready', () => {
 	}).setToken(token);
 	(async () => {
 		try {
-			if (!envFILE.TOKEN) {
+			if (!envFILE?.parsed?.TOKEN) {
 				await rest.put(
 					Routes.applicationCommands(clientId), {
 						body: commands
@@ -60,7 +60,7 @@ client.once('ready', () => {
 			}
 			console.log('Successfully registered application commands.');
 		} catch (error) {
-			console.error(error);
+			if (error) console.error(error);
 		}
 	})();
 });
@@ -72,7 +72,7 @@ client.on('interactionCreate', async interaction => {
 	try {
 		await command.execute(interaction);
 	} catch (error) {
-		console.error(error);
+		if (error) console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });

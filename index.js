@@ -14,7 +14,7 @@ const {
 
 // Create a new client instance
 const client = new Client({
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
+	intents: [Intents.FLAGS.GUILDS]
 });
 
 // Loading commands from the commands folder
@@ -24,11 +24,14 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 // Loading the token from .env file
 const dotenv = require('dotenv');
 const envFILE = dotenv.config();
-const token = process.env['TOKEN'] || envFILE.parsed['TOKEN'];
+const TOKEN = process.env['TOKEN'];
 
-// Edit your clientId and guildId here in this file
-const { clientId, guildId } = require('./config.json');
 
+// Edit your TEST_GUILD_ID here in the env file for development
+const TEST_GUILD_ID = envFILE.parsed['TEST_GUILD_ID'];
+
+
+// Creating a collection for commands in client
 client.commands = new Collection();
 
 for (const file of commandFiles) {
@@ -40,25 +43,28 @@ for (const file of commandFiles) {
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	console.log('Ready!');
+	// Registering the commands in the client
+	const CLIENT_ID = client.user.id;
 	const rest = new REST({
 		version: '9'
-	}).setToken(token);
+	}).setToken(TOKEN);
 	(async () => {
 		try {
-			if (!envFILE?.parsed?.TOKEN) {
+			if (!TEST_GUILD_ID) {
 				await rest.put(
-					Routes.applicationCommands(clientId), {
+					Routes.applicationCommands(CLIENT_ID), {
 						body: commands
 					},
 				);
+				console.log('Successfully registered application commands globally');
 			} else {
 				await rest.put(
-					Routes.applicationGuildCommands(clientId, guildId), {
+					Routes.applicationGuildCommands(CLIENT_ID, TEST_GUILD_ID), {
 						body: commands
 					},
 				);
+				console.log('Successfully registered application commands for development guild');
 			}
-			console.log('Successfully registered application commands.');
 		} catch (error) {
 			if (error) console.error(error);
 		}
@@ -79,4 +85,4 @@ client.on('interactionCreate', async interaction => {
 
 
 // Login to Discord with your client's token
-client.login(token);
+client.login(TOKEN);
